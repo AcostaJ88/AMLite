@@ -127,8 +127,8 @@
             <p class="text-center text-gray-500 mb-6">Inicia sesión para continuar</p>
             <form id="login-form">
                 <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
-                    <input type="text" id="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required value="admin">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Usuario (Email)</label>
+                    <input type="email" id="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required value="admin@cmms.com">
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
@@ -465,6 +465,7 @@
                                 <a class="tab-link active" data-tab="usuarios">Usuarios</a>
                                 <a class="tab-link" data-tab="ubicaciones">Ubicaciones</a>
                                 <a class="tab-link" data-tab="categorias">Categorías de Equipos</a>
+                                <a class="tab-link" data-tab="datos">Gestión de Datos</a>
                             </nav>
                         </div>
                         <div class="mt-6">
@@ -517,6 +518,21 @@
                                         </thead>
                                         <tbody id="categorias-table-body"></tbody>
                                     </table>
+                                </div>
+                            </div>
+                             <div id="tab-datos" class="tab-content">
+                                <h4 class="text-lg font-semibold mb-4">Importar y Exportar Datos</h4>
+                                <p class="text-gray-600 mb-4">Guarda una copia de seguridad de todos los datos de la aplicación en un archivo en tu PC, o restaura la aplicación desde un archivo guardado previamente.</p>
+                                <div class="flex space-x-4">
+                                    <button id="export-data-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center space-x-2">
+                                        <i class="fas fa-download"></i>
+                                        <span>Exportar Datos</span>
+                                    </button>
+                                    <button id="import-data-btn" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center space-x-2">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Importar Datos</span>
+                                    </button>
+                                    <input type="file" id="import-file-input" class="hidden" accept=".json">
                                 </div>
                             </div>
                         </div>
@@ -1501,8 +1517,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- REPORTES LOGIC ---
     const setupReportes = () => {
-        const operationalEquipos = equipos.filter(e => e.estado === 'Operativo').length;
-        document.getElementById('report-availability').textContent = `${equipos.length > 0 ? Math.round((operationalEquipos / equipos.length) * 100) : 0}%`;
         const priorityCounts = ordenes.reduce((acc, o) => { acc[o.prioridad] = (acc[o.prioridad] || 0) + 1; return acc; }, {});
         const woPriorityChartCtx = document.getElementById('woPriorityChart').getContext('2d');
         new Chart(woPriorityChartCtx, { type: 'pie', data: { labels: Object.keys(priorityCounts), datasets: [{ data: Object.values(priorityCounts), backgroundColor: ['rgba(107, 114, 128, 0.7)', 'rgba(234, 179, 8, 0.7)', 'rgba(249, 115, 22, 0.7)', 'rgba(239, 68, 68, 0.7)'] }] }, options: { responsive: true } });
